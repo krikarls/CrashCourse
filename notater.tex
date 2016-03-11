@@ -1,0 +1,400 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[english]{babel} % Using babel for hyphenation
+\usepackage{lmodern} % Changing the font
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{csquotes}
+\usepackage[sortcites=true,sorting=nyt,backend=biber]{biblatex}
+
+\usepackage[colorlinks=true]{hyperref}
+\usepackage{cleveref}
+
+%\usepackage[moderate]{savetrees} % [subtle/moderate/extreme] really compact writing
+\usepackage{framed}
+\usepackage{tcolorbox}
+\tcbuselibrary{hooks}
+\usepackage[parfill]{parskip} % Removes indents
+\usepackage{amsmath} % Environment, symbols etc...
+\usepackage{amssymb}
+\usepackage{float} % Fixing figure locations
+\usepackage{multirow} % For nice tables
+%\usepackage{wasysym} % Astrological symbols
+\usepackage{graphicx} % For pictures etc...
+\usepackage{enumitem} % Points/lists
+\usepackage{physics} % Typesetting of mathematical physics examples: 
+                     % \bra{}, \ket{}, expval{}
+\usepackage{url}
+
+
+\usepackage{caption}
+\usepackage{subcaption}
+
+\definecolor{red}{RGB}{255,10,10}
+
+% To include code(-snippets) with æøå
+\usepackage{listings}
+\lstset{
+language=c++,
+showspaces=false,
+showstringspaces=false,
+frame=l,
+}
+
+\tolerance = 5000 % Bedre tekst
+\hbadness = \tolerance
+\pretolerance = 2000
+
+\numberwithin{equation}{section}
+
+\newcommand{\conj}[1]{#1^*}
+\newcommand{\ve}[1]{\mathbf{#1}} % Vektorer i bold
+\let\oldhat\hat
+\renewcommand{\hat}[1]{\oldhat{#1}}
+\newcommand{\trans}[1]{#1^\top}
+\newcommand{\herm}[1]{#1^\dagger}
+
+\newcommand{\Real}{\mathbb{R}}
+\newcommand{\bigO}[1]{\mathcal{O}\left( #1 \right)}
+
+
+\newcounter{algcounter}
+\renewcommand{\thealgcounter}{\Roman{algcounter}}
+
+\newenvironment{algorithm}{%
+\refstepcounter{algcounter}
+\begin{tcolorbox}
+\centerline{Algorithm \thealgcounter}\vspace{2mm}
+}
+{\end{tcolorbox}}
+
+\newcommand{\figurewidth}{.85\textwidth}
+
+\title{Kræsjkurs i mekanikk }
+\author{Krister Stræte Karlsen \\ 
+\small\texttt{krikarls@math.uio.no}}
+\date{\today}
+
+\begin{document}
+\tcbset{before app=\parfillskip0pt}
+\maketitle
+
+\section{Bevegelse}
+
+Vi lærte i grunnskolen at hvis vi ønsker å finne ut hvor lang strekning en bil har tilbakelagt så kan vi ta dens fart å multiplisere med tiden den kjører. Hvis vi nå sier at bilen befinner seg i posisjon $x(t)$ ved tiden $t$ så kan vi finne den nye posisjon ved tiden $t+\Delta t$, ved å ta den opprinnelige posisjonen pluss $v \Delta t$,
+\begin{align}
+x(t+dt)=x(t)+v\Delta t.
+\end{align}
+
+Akkurat det samme kan vi gjøre med farten. Kjenner vi farten ved tiden $t$ og akselerasjonen så kan vi si at farten i $t+ \Delta t$ er den opprinnelige farten pluss endringen,
+\begin{align}
+v(t+dt)=v(t)+a\Delta t.
+\end{align}
+
+Hva skjer hvis vi lar det gå for lang tid, $\Delta t$, er dette da fortsatt en god modell? Siden vi benytter informasjon(fart og akselerasjon) fra tiden $t$, og farten og akselerasjonen kan forandre seg, så må vi være forsiktige. 
+
+\begin{tcolorbox}
+\textbf{Kommentar til leser:} Hva minner ligning (1.1) og (1.2) deg om? \\
+Dette er jo \emph{Forward Euler}/\emph{Explicit Euler}! Nå er det kanskje også klarere hvorfor en skal velge $\Delta t$ så liten som mulig. 
+\end{tcolorbox}
+
+En matematiker løser problemet med store $\Delta t$, ved å simpelthen la $\Delta t$ bli vanvittig liten, også kalt \emph{infinitesimal}, eller som en grense $\Delta t \to 0$. Ligningene over blir da
+\begin{align}
+\lim_{\Delta t \to 0} \frac{x(t+\Delta t)-x(t)}{\Delta t} = \frac{dx}{dt} =x'(t) = v, \\
+\lim_{\Delta t \to 0} \frac{v(t+\Delta t)-v(t)}{\Delta t} = \frac{dv}{dt} =v'(t) = a.
+\end{align}
+Vi kan også skrive 
+\begin{align*}
+\frac{d^2x}{dt^2}=\frac{dv}{dt}=a.
+\end{align*}
+En kan bare bytte ut $x$ med $y$ og $z$ så har en bevegelsesligningene i tre dimensjoner. Under vises  spesialtilfeller av ligningene som kun er gyldige for konstant akselerasjon.
+
+\textbf{Spesialtilfeller av bevegelsesligningene}
+
+Kun gyldige ved konstant akselerasjon!
+\begin{align}
+v = v_0 + at \\
+s = v_0t + \frac{1}{2} at^2 \\
+s = \frac{v_0 + v}{2}t \\
+v^2 - v_0^2 = 2as
+\end{align}
+Vi kjenner igjen ligning (1.5) som (1.2). Her uten at det er noen krav på at $t$ må være liten. Hvorfor? Her ligger kravet på akselerasjonen i stedet, den må være konstant. En legger også merke til at ligning (1.6) er integralet av ligning (1.5), noe som er i tråd med vår intuisjon siden $s'(t)=v$. 
+
+\textbf{Sirkelbevegelse}
+
+For et objekt i sirkelbane med banefart $v$ er akselerasjonen rettet inn mot sentrum av sirkelbanen og kan uttrykkes som 
+\begin{align}
+a = \frac{v^2}{r},
+\end{align}
+der $r$ er radien i sirkelbanen.
+
+\newpage
+  
+\textbf{Eksempel 1.1 - Bevegelsesgrafer}
+
+Under er en fartsgraf, $v(t)$, hvordan ser posisjonsgrafen $x(t)$, og akselerasjonsgrafen ut $a(t)$? \\
+(Det er tilstrekkelig at du tegner formen/hovedtrekkene av akselerasjonsgrafen)
+
+\begin{figure}[h!]
+\begin{center}
+  \includegraphics[scale=0.4]{fartsgraf.png}
+  \end{center}
+  \caption{Fartsgraf.}
+\end{figure}
+
+\newpage
+
+\textbf{Eksempel 1.2 - En ball som spretter}
+
+Figuren viser fartsgrafen(y-retning) de første 1,4 sekundene av bevegelsen til en ball som blir kastet rett nedover og spretter(vi ser bort fra tiden ballen bruker på selve sprettet/treffe bakken). Det er ingen luftmotstand. 
+
+\begin{figure}[h!]
+\begin{center}
+  \includegraphics[scale=0.3]{sprettball.png}
+  \end{center}
+  \caption{Fartsgraf for en ball som kaster og spretter.}
+\end{figure}
+
+\textbf{a)} Beskriv med ord ferden til ballen de første 1,4 sekundene. Hva skjer i punkt A, B, C og D?
+
+\textbf{b)} Hvor høyt over bakken ble ballen kastet fra?
+
+\textbf{c)} Hvor stor akselerasjon har ballen mellom C og D?
+
+\textbf{d)} Når treffer ballen bakken for andre gang?   
+
+\newpage
+
+\section{Free body diagrams og Newtons 2. lov}
+Hvorfor alt maset om gode figurer og free body diagrams?
+
+\emph{Newtons andre lov} beskriver hvordan et legeme vil bevege seg og lyder slik: 
+
+\begin{tcolorbox}
+The sum of the forces $\mathbf{F}$ on an object is equal to the mass m of that object multiplied by the acceleration vector a of the object: $\mathbf{F} = m\mathbf{a}$.
+\end{tcolorbox} 
+
+For at vi skal kunne ha noen som helst nytte av denne åpenbart viktige relasjonen må vi være i stand til å presist kunne uttrykke hvilke krefter som virker på objektet! Hvordan gjør vi nettopp dette? Free body diagram! Det er en enkel figur som viser hvilke krefter som virker på objektet og ignorer øvrige unødvendige detaljer.
+
+Når vi har tegnet en god figur har vi allerede funnet høyre siden av ligningen $\mathbf{F} = m\mathbf{a}$ og kan enkelt uttrykke aksellerasjonen ved å dele på massen. 
+
+Dette er en vektorligning og kan alltid skrives som et sett av skalare ligninger dersom man er mer komfortabel med det.
+
+Som vektorligning:
+\begin{align*}
+F_x \mathbf{i} + F_y \mathbf{j} + F_z \mathbf{k}= m( a_x \mathbf{i} + a_y \mathbf{j} + a_z \mathbf{k})
+\end{align*}
+Som et sett av skalarligninger:
+\begin{align*}\tag{2.x}
+F_x = ma_x = m \frac{dv_x}{dt} = m\frac{d^2x}{dt^2}
+\end{align*}
+\begin{align*}\tag{2.y}
+F_y = ma_y = m \frac{dv_y}{dt} = m\frac{d^2y}{dt^2}
+\end{align*}
+\begin{align*}\tag{2.z}
+F_z = ma_z = m \frac{dv_z}{dt} = m\frac{d^2z}{dt^2}.
+\end{align*}
+
+Ofte vil vi benytte disse ligningene på formen $a = \frac{dv}{dt} = \frac{d^2 x}{dt^2} = \frac{F}{m}$, da det gjerne er hastighet og posisjon vi er ute etter. En kan da bare integrere ligningen direkte.  
+
+\textbf{Sirkelbevegelse}
+
+Kraften(rettet inn mot sentrum) som trengs for å holde et objekt i sirkelbane med radius $r$, og fart $v$ er gitt ved:
+\begin{align}
+F = ma = m\frac{v^2}{r} .
+\end{align} 
+
+\newpage
+
+\textbf{Eksempel 2.1 - To sett med klosser}
+
+To klosser A og B ligger inntil hverandre på et glatt underlag. Kloss A har masse 2kg og B 1kg. I tilfelle 1
+virker det en kraft F på kloss A slik figuren viser.
+I tilfelle 2 virker det en kraft F på kloss B. Kraften $F = 3.0$ N i begge tilfellene. 
+
+\begin{figure}[h!]
+\begin{center}
+  \includegraphics[scale=0.25]{toklosser.png}
+  \end{center}
+  \caption{To sett med klosser dyttes med samme kraft, men fra hver sin side.}
+\end{figure}
+Finn kreftene mellom klossene i begge tilfeller.
+
+\textbf{Dekomponering av krefter}
+
+1) Tegn den aktuelle kraften $F$ som en hypetenus i en rettvinklet trekant. \\
+2) La katetene være parallelle med aksene, la oss si $x$ og $y$, i koordinatsystemet ditt. PS. Det finnes ofte en lur måte å plassere koordinatsystemet på. \\
+3) Merk katetene $F_x$ og $F_y$. \\
+4) Merk alle vinklene du kjenner. \\
+5) Benytt
+\begin{align*}
+sin(\theta) = \frac{\text{motstående katet}}{F} \quad and \quad cos(\theta) = \frac{\text{hosliggende katet}}{F}
+\end{align*}
+6) Sett inn $F_x$ og $F_y$ i relasjonene over etter hva som passer og løs.
+
+\newpage
+
+\textbf{Eksempel 2.3 - Å holde en bok mot en vegg}
+
+En bok skal holdes på plass(i ro) med en kraft $F$ mot en vegg. Veggen boken hviler mot er ikke glatt så det er friksjon. Vi ønksker å holde boken på plass ved å bruke så liten kraft $F$ som mulig, hva bør da vinkelen $\theta$ til kraften være? 
+
+\begin{figure}[h!]
+\begin{center}
+  \includegraphics[scale=0.25]{bokvegg.png}
+  \end{center}
+  \caption{En bok holdes oppe av friksjonen fra veggen og en kraft $F$ med vinkel $\theta$ med horisontalen.}
+\end{figure}
+
+\newpage 
+ 
+\section{Energi}
+
+Noen ganger er det veldig vanskelig å finne et uttrykk for kreftene på legemene vi ønsker å studere bevegelsen til, og da kan det være nyttig måte å gjøre nettopp dette på. Vi kommer altså ingen vei ved Newtons kjære 2. lov. En alternativ måte er å gjøre noen betraktninger om den \emph{mekaniske energien} til objektene. De vanligste formene for slik energi er \emph{potensiell energi}, \emph{kinetisk energi}, \emph{elastisk/fjær-energi}. Vi lærte noe ala dette i grunnskolen: 
+
+\begin{tcolorbox}
+Energi kan verken skapes eller forsvinne, kun overføres fra én energiform til en annen.
+\end{tcolorbox}
+
+I virkeligheten vil alltid noe av den mekaniske energien gå tapt i form av varme, lyd og lignende, men i vår perfekte fysiske verden er den ofte bevart. Det vil si at hvis vi kjenner den mekaniske energien til objektet i en posisjon, så må den være det samme i en annen posisjon ved en senere tid. Er \underline{ikke} energien bevart, i vår verden, pleier man å opplyse om det, eller gi et sterkt hint om at den ikke er det. Slike tilfeller vil typisk være systemer med friksjon eller luftmotstand. Heldigvis, for friksjon, har vi et enkelt uttrykk for hvor mye energi som går tapt(ekvivalent; hvor stort arbeid friksjonen gjør på objektet). La oss for et øyeblikk kalle den mekanisk energien \underline{før} friksjonen har virket for $E_0$ og den mekaniske energien \underline{etter} for $E_1$. Da har vi
+\begin{align}
+E_0 = E_1 - friksjonsarbeid,
+\end{align} 
+der friksjonsarbeidet er en negativ størrelse. La oss nå sette opp uttrykkene for de vanligste energiformene vi vil jobbe med.
+
+\textbf{Typer mekanisk energi}
+\begin{align}
+\text{Potensiell energi:} \quad E_p = U = mgh \\
+\text{Kinetisk energi:} \quad E_k = K = \frac{1}{2}mv^2 \\
+\text{Elastisk/fjær energi:} \quad E_{spring} = \frac{1}{2}kx^2 \\
+\end{align}
+Uttrykket for energien til fjæren kommer fra å integrere fjærkraften over strekningen.
+
+
+\textbf{Friksjonsarbeid}
+\begin{align}
+W_R = -\mu_d Nx
+\end{align}
+Her er $s$ avstanden friksjonen har virket på parallelt med bevegelsesretningen. Uttrykket over kommer fra å integrere friksjonskraften over strekningen $x$. 
+
+\textbf{Arbeid-energi-setningen}
+
+Endringen i kinetisk energi for et legeme er lik arbeidet gjort på legemet:
+\begin{align}
+K_1-K_0 = W
+\end{align}
+Legg merke til at dette er samme relasjon som ligning (3.6) hvis vi sier sier at den mekaniske energien i (3.6) kun er kinetisk, og arbeidet er et friksjonsarbeid.  
+
+\textbf{Oppgarmingsoppgave - Strikkhopp}
+
+En person hopper i strikk fra en høyde $h$, punkt A ved tiden $t=0$, helt i starten er farten hans null.
+
+Når han har falt en lengde $l$ så starter strikken å strammes, $t=t_1$ (før det var den helt slapp). Dette er punkt B.
+
+Etter å ha falt enda en avstand $s$, han er nå $l+s$ under der han startet), så snur han(dette er altså brunnen av banen) og begynner å bevege seg opp igjen. Dette er punkt C. 
+
+Vi har at $h = l + s$, og du kan anta at strikken oppfører seg som en elastisk fjær. 
+
+Tips: Husk at du kan velge nullnivået for potensiell energi selv.
+
+\begin{figure}[h!]
+\begin{center}
+  \includegraphics[scale=0.50]{strikkhopp.png}
+  \end{center}
+\end{figure}
+
+\underline{Oppgave:} Formuler en likhet for bevaring av energi for strikkhoppet på formen
+\begin{align*}
+E_A = E_B = E_C
+\end{align*} 
+
+
+\textbf{Eksempel 3.1 - Loop}
+
+En bane, uten friksjon, med en loop er som vist på bildet.
+
+\textbf{a)} Hva kan vi umiddelbart, uten å regne, si om farten i punkt B hvis vi kjenner farten i punkt A?
+
+\textbf{b)} Hva er den minste farten et objekt kan ha i A for at det skal komme igjennom loopen uten å miste kontakt med underlaget i toppen? 
+
+\begin{figure}[h!]
+\begin{center}
+  \includegraphics[scale=0.25]{loop.png}
+  \end{center}
+  \caption{En loop.}
+\end{figure}
+
+
+\textbf{Eksempel 3.2 - Kloss, fjær og friksjon}
+
+En kloss med masse $m$ sklir på en flate og støter mot en fjær. Når den treffer fjæra, som da er i likevekt, er farten $v_0$. I området(rødt) fra likevektspunktet og videre er det friksjon. Klossen stopper etter at fjæra har blitt presset sammen en lengde $s$, finn et uttrykk for $s$. 
+
+\begin{figure}[h!]
+\begin{center}
+  \includegraphics[scale=0.5]{fjar.png}
+  \end{center}
+  \caption{Kloss som sklir mot en fjær i et område med friksjon.}
+\end{figure}
+
+\newpage
+ 
+
+\textbf{Eksempel 3.3 - Partikkel i konservativt kraftfelt}
+
+En elektrisk ladet partikkel befinner seg i nærheten av en overflate. Kraften fra overflaten på partikkelen  $F(x)$ kan avledes fra et potensial $U(x)$ og er avhengig av posisjon, en slik kraft kalles \emph{konservativ}. Det virker ingen andre krefter på partikkelen og 
+\begin{align}
+F(x) = \frac{U_0 b}{x^2} - \frac{U_0}{b}.
+\end{align}
+
+\textbf{a)} Vis at $U(x) = \frac{U_0 b}{x} + \frac{U_0 x}{b}$ er et potensial for kraften.
+
+\textbf{b)} i) Tegn en skisse av $U(x)$ \\
+ii) Finn, marker og karakteriser likevekspunktene. 
+
+Anta at partikkelen er i ro ved $x = \frac{b}{2}$.
+
+\textbf{c)} Hva er farten til partikkelen i $x=b$?
+
+\textbf{d)} Hvor langt vekk kommer partikkelen på det meste? 
+
+\textbf{e)} Skisser bevegelsen $x(t)$ til partikkelen.
+
+\textbf{f)} Skriv et program som finner posisjonen $x(t)$ og farten $v(t)$ for partikkelen som startet i ro ved $x=\frac{b}{2}$ .
+
+\newpage
+
+\section{Integrasjonsløkken}
+
+Skrive som et sett av to første ordens differensialligninger
+
+Hvordan sette opp integrasjonsløkken: 
+
+Er det snakk om flere dimensjoner? $\to$ Dekomponer $F$ i $F_x,F_y,F_z$
+
+Er $F$ avhengige av posisjon($x,y,z$), fart $v$ eller  tid $t$? $\to$ Da må uttrykket for $F$ inni integrasjonsløkka(for-løkka)! 
+
+Vi må også ha $x,y,z$, $v$ som arrays. $x = x_0,x_1,..,x_i,..$. osv. 
+
+
+
+\section{Oppsummering}
+
+Det er veldig vanskelig å generalisere oppgaveløsning i fysikk. Hadde det vært enkelt hadde du nok allerede vært introdusert for oppskriften. Uansett så kan jeg fortelle hvordan jeg mener du bør tenke når du får en fysikkoppgave: 
+
+\textbf{Metode - Generell oppgaveløsning}
+
+1) Les oppgaven nøye; hva vet vi og hva skal vi finne ut? \\
+- \quad Uttrykk opplysningene med fysiske symboler for å få oversikt.\\
+- \quad Hva er fysisk symbol for det vi skal finne ut? 
+
+2) Hva har vi(eller kan lett finne) et uttrykk for kreftene eller $x(t), v(t),a(t)$ til objektet/systemet vi ser på? \\
+- \quad Hvis nei, så er det neppe Newtons 2. lov, ligning (2.x-2.z), aktuell. 
+
+3) Hvis Newtons 2. lov ikke er aktuell, er det veldig stor sannsynlighet for at man må benytte energibetraktninger. Hvis kraften er gitt som(eller kan avledes fra) et potensial så bevaring av energi meget aktuelt.
+
+4) Når man har forstått hvilke lover/konsepter som er aktuelle for oppgaven; skriv de ned matematisk, kombiner dem slik at du finner det oppgaven ba om. 
+
+
+
+
+
+\end{document}
